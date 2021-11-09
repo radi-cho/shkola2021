@@ -1,24 +1,38 @@
-var myButton = document.getElementById('btn');
-// var myInput = document.getElementById('inp');
-var allButtons = document.querySelectorAll('button:nth-child(even)');
-var myInput = document.querySelector('#inp');
+const myBtn = document.querySelector("#add-btn");
+const mainInput = document.querySelector("#main-input");
+const contents = document.querySelector("#contents");
 
-allButtons.forEach(x => x.style.background = 'red');
+let tasks = [];
 
-function ggbg() {
-	console.log(myInput.value);
+function check(index) {
+	tasks[index].checked = !tasks[index].checked;
+	renderArray();
 }
 
-myButton.addEventListener('click', ggbg);
+function renderArray() {
+	tasks.sort(x => x.checked ? 1 : -1);
 
-function findNextPrime(x) {
-	while (true) {
-		let prime = true;
-		for (let i = 2; i <= Math.sqrt(x); i++) {
-			if (x % i === 0) prime = false;
-		}
-
-		if (prime) return x;
-		x++;
+	let listItems = "";
+	for (let i = 0; i < tasks.length; i++) {
+		listItems += '<li><input type="checkbox" '
+			+ (tasks[i].checked ? 'checked' : '')
+			+ ' onClick="check('
+			+ i
+			+ ')" id="checkbox'
+			+ i
+			+ '" /><label for="checkbox' 
+			+ i
+			+ '">'
+			+ tasks[i].name
+			+ '</label></li>';
 	}
+
+	contents.innerHTML = listItems;
 }
+
+myBtn.addEventListener("click", function () {
+	tasks.push({name: mainInput.value, checked: false});
+	renderArray();
+
+	mainInput.value = "";
+});
