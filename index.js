@@ -1,6 +1,6 @@
 const myBtn = document.querySelector("#add-btn");
 const mainInput = document.querySelector("#main-input");
-const contents = document.querySelector("#contents");
+let contents = document.querySelector("#contents");
 
 let tasks = [];
 
@@ -10,24 +10,31 @@ function check(index) {
 }
 
 function renderArray() {
+	contents.remove();
+	contents = document.createElement("ul");
+	contents.setAttribute("id", "contents");
+
 	tasks.sort(x => x.checked ? 1 : -1);
 
-	let listItems = "";
 	for (let i = 0; i < tasks.length; i++) {
-		listItems += '<li><input type="checkbox" '
-			+ (tasks[i].checked ? 'checked' : '')
-			+ ' onClick="check('
-			+ i
-			+ ')" id="checkbox'
-			+ i
-			+ '" /><label for="checkbox' 
-			+ i
-			+ '">'
-			+ tasks[i].name
-			+ '</label></li>';
+		const li = document.createElement("li");
+		const checkbox = document.createElement("input");
+		checkbox.setAttribute("type", "checkbox");
+		checkbox.setAttribute("id", "checkbox" + i);
+		checkbox.checked = tasks[i].checked;
+		checkbox.addEventListener("click", () => check(i));
+
+		const label = document.createElement("label");
+		label.setAttribute("for", "checkbox" + i);
+		label.appendChild(document.createTextNode(tasks[i].name));
+
+		li.appendChild(checkbox);
+		li.appendChild(label);
+
+		contents.appendChild(li);
 	}
 
-	contents.innerHTML = listItems;
+	document.body.appendChild(contents);
 }
 
 myBtn.addEventListener("click", function () {
